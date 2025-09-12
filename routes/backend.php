@@ -16,7 +16,10 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
     // user list 
     Route::controller(UserController::class)->group(function () {
         Route::get('user', 'userlist')->name('backend.user.list');
+        Route::post('user', 'userStore')->name('backend.user.store');
         Route::get('user/details/{id}', 'userDetails')->name('backend.users.details');
+        Route::put('user/details/update/{id}', 'userUpdate')->name('backend.user.update');
+        Route::put('user/password/update/{id}', 'updatePassword')->name('backend.user.pass.update');
     });
 });
 

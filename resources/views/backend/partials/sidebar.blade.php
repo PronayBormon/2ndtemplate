@@ -20,14 +20,14 @@
                     <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                         <a href="{{ route('dashboard') }}" class="menu-link">
                             <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                            <div data-i18n="Page 1">Dashboard</div>
+                            <div >Dashboard</div>
                         </a>
                     </li>
 
                     <li class="menu-item {{ request()->routeIs('backend.user*') ? 'active' : '' }}">
                         <a href="{{ route('backend.user.list') }}" class="menu-link">
                             <i class="menu-icon tf-icons ti ti-users"></i>
-                            <div data-i18n="user list">User List</div>
+                            <div>User List</div>
                         </a>
                     </li>
 

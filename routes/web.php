@@ -1,14 +1,28 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/dashboard', function () {
-    return view('backend.layouts.dashboard');
+
+    $total = User::count();
+    $user = User::where('role', 'user')->count();
+
+    $active = User::where('status', 'active')->count();
+    $inactive = User::where('status', 'inactive')->count();
+    $banned = User::where('status', 'banned')->count();
+    return view('backend.layouts.dashboard', compact(
+        "total",
+        "user",
+        "active",
+        "inactive",
+        "banned"
+    ));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -17,5 +31,5 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
-require __DIR__.'/backend.php';
+require __DIR__ . '/auth.php';
+require __DIR__ . '/backend.php';

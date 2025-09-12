@@ -1,9 +1,13 @@
 @extends('backend.app')
 
+
 @section('title')
-    User List
+    user details
 @endsection
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('frontend/assets/vendor/libs/flatpickr/flatpickr.css') }}" />
+@endpush
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">User / </span> View</h4>
@@ -56,7 +60,9 @@
                                 </li>
                                 <li class="mb-2 pt-1">
                                     <span class="fw-semibold me-1">Status:</span>
-                                    <span class="badge bg-label-success">{{ ucfirst($data->status) }}</span>
+                                    <span class="badge bg-label-{{ $data->status == 'active' ? 'success' : 'danger' }}">
+                                        {{ ucfirst($data->status) }}
+                                    </span>
                                 </li>
                                 <li class="mb-2 pt-1">
                                     <span class="fw-semibold me-1">Role:</span>
@@ -90,7 +96,6 @@
                             <div class="d-flex justify-content-center">
                                 <a href="javascript:;" class="btn btn-primary me-3" data-bs-target="#editUser"
                                     data-bs-toggle="modal">Edit</a>
-                                <a href="javascript:;" class="btn btn-label-danger suspend-user">Suspended</a>
                             </div>
                         </div>
                     </div>
@@ -101,7 +106,7 @@
                 <div class="card mb-4">
                     <h5 class="card-header">Change Password</h5>
                     <div class="card-body">
-                        <form id="" method="POST" action="{{ route('password.update') }}">
+                        <form id="" method="POST" action="{{ route('backend.user.pass.update', $data->id) }}">
                             @csrf
                             @method('put')
                             <div class="alert alert-warning" role="alert">
@@ -109,19 +114,6 @@
                                 <span>Minimum 8 characters long, uppercase & symbol</span>
                             </div>
                             <div class="row">
-                                <div class="mb-3 col-12 col-sm-12 form-password-toggle">
-                                    <label class="form-label" for="current_password">Current Password</label>
-                                    <div class="input-group input-group-merge">
-                                        <input class="form-control" type="password" name="current_password"
-                                            id="current_password" placeholder="••••••••••••" />
-                                        <span class="input-group-text cursor-pointer toggle-password">
-                                            <i class="ti ti-eye-off"></i>
-                                        </span>
-                                    </div>
-                                    @error('current_password')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
                                 <div class="mb-3 col-12 col-sm-6 form-password-toggle">
                                     <label class="form-label" for="password">New Password</label>
                                     <div class="input-group input-group-merge">
@@ -173,199 +165,161 @@
                 <div class="modal-content p-3 p-md-5">
                     <div class="modal-body">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
                         <div class="text-center mb-4">
                             <h3 class="mb-2">Edit User Information</h3>
-                            <p class="text-muted">Updating user details will receive a privacy audit.</p>
+                            <p class="text-muted">Update the user details below.</p>
                         </div>
-                        <form id="editUserForm" class="row g-3" onsubmit="return false">
+
+                        <form id="" action="{{ route('backend.user.update', $data->id) }}" method="POST"
+                            enctype="multipart/form-data" class="row g-3">
+                            @csrf
+                            @method('PUT')
+                            <!-- Name -->
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="modalEditUserFirstName">First Name</label>
-                                <input type="text" id="modalEditUserFirstName" name="modalEditUserFirstName"
-                                    class="form-control" placeholder="John" />
+                                <label class="form-label" for="name">Full Name</label>
+                                <input type="text" value="{{ $data->name }}" id="name" name="name"
+                                    class="form-control" placeholder="John Doe" />
                             </div>
+
+                            <!-- Email -->
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="modalEditUserLastName">Last Name</label>
-                                <input type="text" id="modalEditUserLastName" name="modalEditUserLastName"
-                                    class="form-control" placeholder="Doe" />
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label" for="modalEditUserName">Username</label>
-                                <input type="text" id="modalEditUserName" name="modalEditUserName"
-                                    class="form-control" placeholder="john.doe.007" />
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <label class="form-label" for="modalEditUserEmail">Email</label>
-                                <input type="text" id="modalEditUserEmail" name="modalEditUserEmail"
+                                <label class="form-label" for="email">Email</label>
+                                <input type="email" id="email" value="{{ $data->email }}" name="email"
                                     class="form-control" placeholder="example@domain.com" />
                             </div>
+
+                            <!-- Password -->
+                            {{-- <div class="col-12 col-md-6">
+                                <label class="form-label" for="password">Password</label>
+                                <input type="password" id="password" name="password" class="form-control"
+                                    placeholder="••••••••" />
+                            </div> --}}
+
+                            <!-- Role -->
+                            {{-- {{ $data }} --}}
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="modalEditUserStatus">Status</label>
-                                <select id="modalEditUserStatus" name="modalEditUserStatus" class="form-select"
-                                    aria-label="Default select example">
-                                    <option selected>Status</option>
-                                    <option value="1">Active</option>
-                                    <option value="2">Inactive</option>
-                                    <option value="3">Suspended</option>
+                                <label class="form-label" for="role">Role</label>
+                                <select id="role" name="role" class="form-select">
+                                    @foreach (['super_admin', 'admin', 'manager', 'editor', 'user'] as $role)
+                                        <option value="{{ $role }}" @selected($data->role === $role)>
+                                            {{ ucwords(str_replace('_', ' ', $role)) }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
+
+                            <!-- Phone -->
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="modalEditTaxID">Tax ID</label>
-                                <input type="text" id="modalEditTaxID" name="modalEditTaxID"
-                                    class="form-control modal-edit-tax-id" placeholder="123 456 7890" />
+                                <label class="form-label" for="phone">Phone</label>
+                                <input type="text" id="phone" value="{{ $data->phone }}" name="phone"
+                                    class="form-control" placeholder="+1 234 567 890" />
                             </div>
+
+                            <!-- Address -->
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="modalEditUserPhone">Phone Number</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">US (+1)</span>
-                                    <input type="text" id="modalEditUserPhone" name="modalEditUserPhone"
-                                        class="form-control phone-number-mask" placeholder="202 555 0111" />
-                                </div>
+                                <label class="form-label" for="address">Address</label>
+                                <input type="text" id="address" value="{{ $data->address }}" name="address"
+                                    class="form-control" placeholder="123 Street, City" />
                             </div>
+
+                            <!-- Avatar -->
+                            <div class="col-12">
+                                <label class="form-label" for="avatar">Avatar</label>
+                                <input type="file" id="avatar" name="avatar" class="form-control" />
+                            </div>
+
+                            <!-- Date of Birth -->
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="modalEditUserLanguage">Language</label>
-                                <select id="modalEditUserLanguage" name="modalEditUserLanguage"
-                                    class="select2 form-select" multiple>
+                                <label class="form-label" for="birthDate">Date of Birth</label>
+                                <input type="text" id="birthDate" value="{{ $data->date_of_birth }}"
+                                    name="date_of_birth" class="form-control" />
+                            </div>
+
+                            <!-- Gender -->
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="gender">Gender</label>
+                                <select id="gender" name="gender" class="form-select">
                                     <option value="">Select</option>
-                                    <option value="english" selected>English</option>
-                                    <option value="spanish">Spanish</option>
-                                    <option value="french">French</option>
-                                    <option value="german">German</option>
-                                    <option value="dutch">Dutch</option>
-                                    <option value="hebrew">Hebrew</option>
-                                    <option value="sanskrit">Sanskrit</option>
-                                    <option value="hindi">Hindi</option>
+                                    <option value="male" @selected($data->gender === 'male')>Male</option>
+                                    <option value="female" @selected($data->gender === 'female')>Female</option>
+                                    <option value="other" @selected($data->gender === 'other')>Other</option>
                                 </select>
                             </div>
+
+                            <!-- Bio -->
+                            <div class="col-12">
+                                <label class="form-label" for="bio">Bio</label>
+                                <textarea id="bio" name="bio" class="form-control" rows="3"
+                                    placeholder="Write something about user...">{{ $data->bio }}</textarea>
+                            </div>
+
+                            <!-- Social Links -->
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="modalEditUserCountry">Country</label>
-                                <select id="modalEditUserCountry" name="modalEditUserCountry" class="select2 form-select"
-                                    data-allow-clear="true">
-                                    <option value="">Select</option>
-                                    <option value="Australia">Australia</option>
-                                    <option value="Bangladesh">Bangladesh</option>
-                                    <option value="Belarus">Belarus</option>
-                                    <option value="Brazil">Brazil</option>
-                                    <option value="Canada">Canada</option>
-                                    <option value="China">China</option>
-                                    <option value="France">France</option>
-                                    <option value="Germany">Germany</option>
-                                    <option value="India">India</option>
-                                    <option value="Indonesia">Indonesia</option>
-                                    <option value="Israel">Israel</option>
-                                    <option value="Italy">Italy</option>
-                                    <option value="Japan">Japan</option>
-                                    <option value="Korea">Korea, Republic of</option>
-                                    <option value="Mexico">Mexico</option>
-                                    <option value="Philippines">Philippines</option>
-                                    <option value="Russia">Russian Federation</option>
-                                    <option value="South Africa">South Africa</option>
-                                    <option value="Thailand">Thailand</option>
-                                    <option value="Turkey">Turkey</option>
-                                    <option value="Ukraine">Ukraine</option>
-                                    <option value="United Arab Emirates">United Arab Emirates</option>
-                                    <option value="United Kingdom">United Kingdom</option>
-                                    <option value="United States">United States</option>
-                                </select>
+                                <label class="form-label" for="facebook_url">Facebook</label>
+                                <input type="url" id="facebook_url" name="facebook_url"
+                                    value="{{ $data->facebook_url }}" class="form-control"
+                                    placeholder="https://facebook.com/username" />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="twitter_url">Twitter</label>
+                                <input type="url" id="twitter_url" name="twitter_url"
+                                    value="{{ $data->twitter_url }}" class="form-control"
+                                    placeholder="https://twitter.com/username" />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="linkedin_url">LinkedIn</label>
+                                <input type="url" id="linkedin_url" name="linkedin_url"
+                                    value="{{ $data->facebook_url }}" class="form-control"
+                                    placeholder="https://linkedin.com/in/username" />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="instagram_url">Instagram</label>
+                                <input type="url" id="instagram_url" name="instagram_url"
+                                    value="{{ $data->instagram_url }}" class="form-control"
+                                    placeholder="https://instagram.com/username" />
                             </div>
                             <div class="col-12">
-                                <label class="switch">
-                                    <input type="checkbox" class="switch-input" />
-                                    <span class="switch-toggle-slider">
-                                        <span class="switch-on"></span>
-                                        <span class="switch-off"></span>
-                                    </span>
-                                    <span class="switch-label">Use as a billing address?</span>
-                                </label>
+                                <label class="form-label" for="website">Website</label>
+                                <input type="url" id="website" name="website" value="{{ $data->website }}"
+                                    class="form-control" placeholder="https://example.com" />
                             </div>
+
+                            <!-- Status -->
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="status">Status</label>
+                                <select id="status" name="status" class="form-select">
+                                    <option value="active" @selected($data->status == 'active')>Active</option>
+                                    <option value="inactive" @selected($data->status == 'inactive')>Inactive</option>
+                                    <option value="banned" @selected($data->status == 'banned')>Banned</option>
+                                </select>
+                            </div>
+
+                            <!-- Last Login (readonly) -->
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="last_login_at">Last Login</label>
+                                <input type="text" id="last_login_at" name="last_login_at"
+                                    value="{{ $data->last_login_at }}" class="form-control" readonly />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="last_login_ip">Last Login IP</label>
+                                <input type="text" id="last_login_ip" name="last_login_ip"
+                                    value="{{ $data->last_login_ip }}" class="form-control" readonly />
+                            </div>
+
+                            <!-- Submit / Cancel -->
                             <div class="col-12 text-center">
-                                <button type="submit" class="btn btn-primary me-sm-3 me-1">Submit</button>
-                                <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
-                                    aria-label="Close">
-                                    Cancel
-                                </button>
+                                <button type="submit" class="btn btn-primary me-sm-3 me-1">Save Changes</button>
+                                <button type="reset" class="btn btn-label-secondary"
+                                    data-bs-dismiss="modal">Cancel</button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
         </div>
         <!--/ Edit User Modal -->
-
-        <!-- Enable OTP Modal -->
-        <div class="modal fade" id="enableOTP" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-simple modal-enable-otp modal-dialog-centered">
-                <div class="modal-content p-3 p-md-5">
-                    <div class="modal-body">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <div class="text-center mb-4">
-                            <h3 class="mb-2">Enable One Time Password</h3>
-                            <p>Verify Your Mobile Number for SMS</p>
-                        </div>
-                        <p>Enter your mobile phone number with country code and we will send you a verification code.</p>
-                        <form id="enableOTPForm" class="row g-3" onsubmit="return false">
-                            <div class="col-12">
-                                <label class="form-label" for="modalEnableOTPPhone">Phone Number</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">US (+1)</span>
-                                    <input type="text" id="modalEnableOTPPhone" name="modalEnableOTPPhone"
-                                        class="form-control phone-number-otp-mask" placeholder="202 555 0111" />
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-primary me-sm-3 me-1">Submit</button>
-                                <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
-                                    aria-label="Close">
-                                    Cancel
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--/ Enable OTP Modal -->
-
-        <!-- Add New Credit Card Modal -->
-        <div class="modal fade" id="upgradePlanModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-simple modal-upgrade-plan">
-                <div class="modal-content p-3 p-md-5">
-                    <div class="modal-body">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <div class="text-center mb-4">
-                            <h3 class="mb-2">Upgrade Plan</h3>
-                            <p>Choose the best plan for user.</p>
-                        </div>
-                        <form id="upgradePlanForm" class="row g-3" onsubmit="return false">
-                            <div class="col-sm-8">
-                                <label class="form-label" for="choosePlan">Choose Plan</label>
-                                <select id="choosePlan" name="choosePlan" class="form-select" aria-label="Choose Plan">
-                                    <option selected>Choose Plan</option>
-                                    <option value="standard">Standard - $99/month</option>
-                                    <option value="exclusive">Exclusive - $249/month</option>
-                                    <option value="Enterprise">Enterprise - $499/month</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-4 d-flex align-items-end">
-                                <button type="submit" class="btn btn-primary">Upgrade</button>
-                            </div>
-                        </form>
-                    </div>
-                    <hr class="mx-md-n5 mx-n3" />
-                    <div class="modal-body">
-                        <p class="mb-0">User current plan is standard plan</p>
-                        <div class="d-flex justify-content-between align-items-center flex-wrap">
-                            <div class="d-flex justify-content-center me-2">
-                                <sup class="h6 pricing-currency pt-1 mt-3 mb-0 me-1 text-primary">$</sup>
-                                <h1 class="display-5 mb-0 text-primary">99</h1>
-                                <sub class="h5 pricing-duration mt-auto mb-2 text-muted">/month</sub>
-                            </div>
-                            <button class="btn btn-label-danger cancel-subscription mt-3">Cancel Subscription</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--/ Add New Credit Card Modal -->
 
         <!-- /Modals -->
     </div>
@@ -376,6 +330,8 @@
     <script src="{{ asset('frontend/assets/js/modal-enable-otp.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/app-user-view.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/app-user-view-security.js') }}"></script>
+    <script src="{{ asset('frontend/assets/js/app-user-view-security.js') }}"></script>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

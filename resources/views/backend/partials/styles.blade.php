@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="{{ asset('frontend/assets/css/demo.css') }}" />
 
 <!-- Vendors CSS -->
+<link rel="stylesheet" href="{{ asset('frontend/assets/vendor/libs/flatpickr/flatpickr.css') }}" />
 <link rel="stylesheet" href="/frontend/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 <link rel="stylesheet" href="/frontend/assets/vendor/libs/node-waves/node-waves.css" />
 <link rel="stylesheet" href="/frontend/assets/vendor/libs/typeahead-js/typeahead.css" />
@@ -24,8 +25,15 @@
 <script src="{{ asset('frontend/assets/vendor/js/helpers.js') }}"></script>
 <script src="{{ asset('frontend/assets/js/config.js') }}"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<style>
+    body {
+        transition: background-color 0.3s, color 0.3s;
+    }
+</style>
 @stack('styles')
 <!-- Core CSS -->
 <link rel="stylesheet" id="core-link" href="{{ asset('frontend/assets/vendor/css/rtl/core.css') }}"
     class="template-customizer-core-css" />
 <link id="theme-link" rel="stylesheet" href="{{ asset('frontend/assets/vendor/css/rtl/theme-default.css') }}" />
+{{-- Toaster  --}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">

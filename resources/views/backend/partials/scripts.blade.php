@@ -13,16 +13,18 @@
     <script src="/frontend/assets/js/main.js"></script>
     <!-- endbuild -->
     <!-- Vendors JS -->
-    <script src="/frontend/assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
-    <script src="/frontend/assets/vendor/libs/cleavejs/cleave.js"></script>
-    <script src="/frontend/assets/vendor/libs/cleavejs/cleave-phone.js"></script>
-    <script src="/frontend/assets/vendor/libs/select2/select2.js"></script>
-    <script src="/frontend/assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script>
-    <script src="/frontend/assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
-    <script src="/frontend/assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js"></script>
+    <script src="{{ asset('frontend/assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+    <script src="{{ asset('frontend/assets/vendor/libs/cleavejs/cleave.js') }}"></script>
+    <script src="{{ asset('frontend/assets/vendor/libs/cleavejs/cleave-phone.js') }}"></script>
+    <script src="{{ asset('frontend/assets/vendor/libs/select2/select2.js') }}"></script>
+    <script src="{{ asset('frontend/assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
+    <script src="{{ asset('frontend/assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('frontend/assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js') }}"></script>
     <!-- Main JS -->
+    <script src="{{ asset('frontend/assets/vendor/js/menu.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/main.js') }}"></script>
     <!-- Page JS -->
+
 
 
     <!--begin::Vendors Javascript(used for this page only)-->
@@ -31,6 +33,14 @@
 
     {{-- Summer note  --}}
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
+
+    <!-- toaster  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="{{ asset('frontend/assets/vendor/libs/flatpickr/flatpickr.js') }}"></script>
+
+
+
+
 
     <script>
         $('#editor').summernote({
@@ -107,6 +117,26 @@
                 localStorage.setItem('theme', 'light');
             }
             updateToggle();
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const eventStartDate = document.querySelector('#birthDate');
+
+            if (eventStartDate) {
+                flatpickr(eventStartDate, {
+                    enableTime: true,
+                    dateFormat: "Y-m-d\\TH:i:S", // proper datetime format
+                    // altFormat: 'Y-m-dTH:i:S',
+                    altInput: true,
+                    onReady: function(selectedDates, dateStr, instance) {
+                        if (instance.isMobile) {
+                            instance.mobileInput.setAttribute('step', null);
+                        }
+                    }
+                });
+            }
         });
     </script>
 

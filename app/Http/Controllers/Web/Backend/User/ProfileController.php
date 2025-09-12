@@ -83,6 +83,6 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return redirect()->back()->with('success', 'User profile updated successfully.');
+        return redirect()->back()->with('t-success', 'User profile updated successfully.');
     }
 }

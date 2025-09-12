@@ -16,9 +16,62 @@
 
     @include('backend.partials.styles')
 
+
 </head>
 
 <body>
+    <!-- From Uiverse.io by Praashoo7 -->
+    <div class="loader_box" id="loader">
+
+        <div class="main">
+            <div class="up">
+                <div class="loaders">
+                    <div class="loader"></div>
+                    <div class="loader"></div>
+                    <div class="loader"></div>
+                    <div class="loader"></div>
+                    <div class="loader"></div>
+                    <div class="loader"></div>
+                    <div class="loader"></div>
+                    <div class="loader"></div>
+                    <div class="loader"></div>
+                    <div class="loader"></div>
+                </div>
+                <div class="loadersB">
+                    <div class="loaderA">
+                        <div class="ball0"></div>
+                    </div>
+                    <div class="loaderA">
+                        <div class="ball1"></div>
+                    </div>
+                    <div class="loaderA">
+                        <div class="ball2"></div>
+                    </div>
+                    <div class="loaderA">
+                        <div class="ball3"></div>
+                    </div>
+                    <div class="loaderA">
+                        <div class="ball4"></div>
+                    </div>
+                    <div class="loaderA">
+                        <div class="ball5"></div>
+                    </div>
+                    <div class="loaderA">
+                        <div class="ball6"></div>
+                    </div>
+                    <div class="loaderA">
+                        <div class="ball7"></div>
+                    </div>
+                    <div class="loaderA">
+                        <div class="ball8"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- End loader  -->
+
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
@@ -65,6 +118,24 @@
 
     <!-- Core JS -->
     @include('backend.partials.scripts')
+
+    <script>
+        window.onload = function() {
+            document.getElementById("loader").style.display = "none";
+        }
+    </script>
+
+    <!-- Toastr Notifications -->
+    <script>
+        @foreach (['t-success', 't-error', 't-warning', 't-info'] as $type)
+            @if (session()->has($type))
+                toastr.{{ str_replace('t-', '', $type) }}("{{ session($type) }}");
+            @endif
+        @endforeach
+    </script>
+
+
+
 
 </body>
 
