@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserSeeder extends Seeder
 {
@@ -17,13 +16,15 @@ class UserSeeder extends Seeder
         $roles = ['super_admin', 'admin', 'manager', 'editor', 'user'];
 
         foreach ($roles as $role) {
-            User::create([
-                'name' => ucfirst($role) . ' User',
-                'email' => $role . '@gmail.com',
-                'password' => Hash::make('12345678'),
-                'role' => $role,
-                'status' => 'active',
-            ]);
+            User::firstOrCreate(
+                ['email' => $role . '@gmail.com'], // check by email
+                [
+                    'name' => ucfirst($role) . ' User',
+                    'password' => Hash::make('12345678'),
+                    'role' => $role,
+                    'status' => 'active', // adjust if your status column has specific values
+                ]
+            );
         }
     }
 }

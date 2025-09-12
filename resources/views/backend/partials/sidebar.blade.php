@@ -30,6 +30,12 @@
                             <div>User List</div>
                         </a>
                     </li>
+                    <li class="menu-item {{ request()->routeIs('backend.pages*') ? 'active' : '' }}">
+                        <a href="{{ route('backend.pages.list') }}" class="menu-link">
+                            <i class="menu-icon tf-icons ti ti-users"></i>
+                            <div>Dynamic Pages</div>
+                        </a>
+                    </li>
 
                 </ul>
             </aside>

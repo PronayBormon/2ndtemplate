@@ -5,8 +5,20 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    $total = User::count();
+    $user = User::where('role', 'user')->count();
+
+    $active = User::where('status', 'active')->count();
+    $inactive = User::where('status', 'inactive')->count();
+    $banned = User::where('status', 'banned')->count();
+    return view('backend.layouts.dashboard', compact(
+        "total",
+        "user",
+        "active",
+        "inactive",
+        "banned"
+    ));
+})->middleware(['auth:sanctum', 'role:admin,super_admin,manager,editor']);
 
 Route::get('/dashboard', function () {
 
@@ -23,7 +35,7 @@ Route::get('/dashboard', function () {
         "inactive",
         "banned"
     ));
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth:sanctum', 'role:admin,super_admin,manager,editor'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
