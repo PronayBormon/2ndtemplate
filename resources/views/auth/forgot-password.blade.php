@@ -44,7 +44,7 @@
                 email you a password reset link that will allow you to choose a new one</p>
 
             <!-- Session Status -->
-            <x-auth-session-status class="mb-4" :status="session('status')" />
+            <x-auth-session-status class="mb-4 " style="color: #08c892" :status="session('status')" />
             <form class="mb-3" method="POST" action="{{ route('password.email') }}" enctype="multipart/form-data">
                 @csrf
                 {{-- @method('put') --}}
