@@ -18,7 +18,7 @@ Route::get('/', function () {
         "inactive",
         "banned"
     ));
-})->middleware(['auth:sanctum', 'role:admin,super_admin,manager,editor']);
+})->middleware(['auth:sanctum', 'role:admin,super_admin,manager,editor'])->name('home');
 
 Route::get('/dashboard', function () {
 

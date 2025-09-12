@@ -17,10 +17,11 @@
 
                 <ul class="menu-inner py-1">
                     <!-- Page -->
-                    <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                    <li
+                        class="menu-item {{ (request()->routeIs('dashboard') ? 'active' : '' || request()->routeIs('home')) ? 'active' : '' }}">
                         <a href="{{ route('dashboard') }}" class="menu-link">
                             <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                            <div >Dashboard</div>
+                            <div>Dashboard</div>
                         </a>
                     </li>
 
