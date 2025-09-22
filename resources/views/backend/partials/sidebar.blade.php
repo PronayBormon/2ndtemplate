@@ -47,14 +47,15 @@
                     </li>
 
                     <!-- Settings -->
-                    <li class="menu-item {{ request()->routeIs('backend.admin.profile*') ? 'open' : '' }}">
+                    <li
+                        class="menu-item {{ request()->routeIs('backend.admin.profile*') || request()->routeIs('admin.settings.edit') ? 'open' : '' }}">
                         <a href="javascript:void(0);"
                             class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons ti ti-settings"></i>
                             <div data-i18n="Settings">Settings</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item">
+                            <li class="menu-item {{ request()->routeIs('admin.settings.edit') ? 'active' : '' }}">
                                 <a href="{{ route('admin.settings.edit') }}"
                                     class="menu-link">
                                     <div data-i18n="System Settings">System Settings</div>

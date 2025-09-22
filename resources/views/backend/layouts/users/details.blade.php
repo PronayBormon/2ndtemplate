@@ -1,6 +1,5 @@
 @extends('backend.app')
 
-
 @section('title')
     user details
 @endsection
@@ -8,6 +7,7 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('frontend/assets/vendor/libs/flatpickr/flatpickr.css') }}" />
 @endpush
+
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">User / </span> View</h4>

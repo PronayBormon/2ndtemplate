@@ -3,10 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Http\Request;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -35,9 +36,23 @@ class User extends Authenticatable
         "instagram_url",
         "website",
         "status",
+        'reset_password_token',
+        'reset_password_token_exp',
         "last_login_at",
         "last_login_ip",
     ];
+
+
+    public function getAvatarAttribute($value)
+    {
+        // if (filter_var($value, FILTER_VALIDATE_URL)) {
+        //     return $value;
+        // }
+        if (request()->is('api/*') && !empty($value)) {
+            return url($value);
+        }
+        return $value;
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -47,7 +62,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'reset_password_token',
+        'reset_password_token_exp',
     ];
+
+
 
     /**
      * Get the attributes that should be cast.
