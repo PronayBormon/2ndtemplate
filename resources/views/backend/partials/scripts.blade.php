@@ -119,7 +119,6 @@
             updateToggle();
         });
     </script>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const eventStartDate = document.querySelector('#birthDate');
@@ -139,5 +138,11 @@
             }
         });
     </script>
+    <!-- Dropify JS --><script src="https://cdn.jsdelivr.net/npm/dropify@0.2.2/dist/js/dropify.min.js"></script>
 
+    <script>
+        $(document).ready(function() {
+            $('.dropify').dropify();
+        });
+    </script>
     @stack('scripts')

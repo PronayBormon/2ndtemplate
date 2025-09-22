@@ -1,10 +1,11 @@
-@extends('errors.layout')
+@extends('errors.app')
 
 @section('title', '404 - Not Found')
 
 @section('content')
     <div class="d-flex align-items-center justify-content-center error-container">
         <div class="text-center">
+            <img src="{{asset('frontend/images/logo.png')}}" style="height: 60px;" alt="" class="img-fluid">
             <h1 class="error-code">404</h1>
             <h2 class="mb-3">Oops! Page Not Found</h2>
             <p class="text-muted mb-4">

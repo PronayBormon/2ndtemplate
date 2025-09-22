@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\Web\Backend\DynamicPage\DynamicPageController;
+use App\Models\DynamicPage;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\Backend\User\UserController;
 use App\Http\Controllers\Web\Backend\User\ProfileController;
-use App\Models\DynamicPage;
+use App\Http\Controllers\Web\Backend\Settings\SystemSettingController;
+use App\Http\Controllers\Web\Backend\DynamicPage\DynamicPageController;
 
 Route::prefix('admin')
     ->middleware(['auth:sanctum', 'role:admin,super_admin,manager,editor'])
@@ -39,6 +40,9 @@ Route::prefix('admin')
             Route::get('pages/edit/{id}', 'pageEdit')->name('backend.pages.edit');
             Route::put('pages/update/{id}', 'pageUpdate')->name('backend.pages.update');
         });
+
+        Route::get('/system/settings', [SystemSettingController::class, 'edit'])->name('admin.settings.edit');
+        Route::post('/system/settings', [SystemSettingController::class, 'update'])->name('admin.settings.update');
     });
 
 require __DIR__ . '/auth.php';
