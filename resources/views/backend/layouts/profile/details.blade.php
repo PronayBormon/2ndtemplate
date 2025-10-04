@@ -343,24 +343,5 @@
         });
     </script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll(".toggle-password").forEach(function(toggle) {
-                toggle.addEventListener("click", function() {
-                    let input = this.parentElement.querySelector("input");
-                    let icon = this.querySelector("i");
 
-                    if (input.type === "password") {
-                        input.type = "text";
-                        icon.classList.remove("ti-eye-off");
-                        icon.classList.add("ti-eye");
-                    } else {
-                        input.type = "password";
-                        icon.classList.remove("ti-eye");
-                        icon.classList.add("ti-eye-off");
-                    }
-                });
-            });
-        });
-    </script>
 @endpush

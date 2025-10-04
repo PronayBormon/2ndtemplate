@@ -193,7 +193,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="text-end mt-4">
                     <button type="submit"
                         class="btn btn-success px-4">Update Settings</button>

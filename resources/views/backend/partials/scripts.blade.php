@@ -23,13 +23,11 @@
     <!-- Main JS -->
     <script src="{{ asset('frontend/assets/vendor/js/menu.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/main.js') }}"></script>
+
     <!-- Page JS -->
-
-
 
     <!--begin::Vendors Javascript(used for this page only)-->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-
 
     {{-- Summer note  --}}
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
@@ -37,10 +35,6 @@
     <!-- toaster  -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="{{ asset('frontend/assets/vendor/libs/flatpickr/flatpickr.js') }}"></script>
-
-
-
-
 
     <script>
         $('#editor').summernote({
@@ -138,7 +132,8 @@
             }
         });
     </script>
-    <!-- Dropify JS --><script src="https://cdn.jsdelivr.net/npm/dropify@0.2.2/dist/js/dropify.min.js"></script>
+    <!-- Dropify JS -->
+    <script src="https://cdn.jsdelivr.net/npm/dropify@0.2.2/dist/js/dropify.min.js"></script>
 
     <script>
         $(document).ready(function() {
