@@ -16,6 +16,9 @@ Route::prefix('auth')->controller(AuthAPIController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('email-verify', 'verifyEmail');
     Route::post('resend-otp', 'resendOtp');
+    
+    Route::get('logout', 'logout')->middleware('auth:sanctum');
+    Route::get('delete', 'deleteAccount')->middleware('auth:sanctum');
 });
 
 Route::prefix('password')->controller(ForgetPassAPIController::class)->group(function () {
@@ -32,5 +35,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('user')->controller(ProfileApiController::class)->group(function () {
         Route::get('profile', 'index');
         Route::put('update', 'updateDetails');
+        Route::post('update/password', 'updatePassword');
     });
 });

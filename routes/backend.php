@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\Backend\BusinessCategory\BusinessCategoryController;
 use App\Models\DynamicPage;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\Backend\User\UserController;
@@ -43,6 +44,17 @@ Route::prefix('admin')
 
         Route::get('/system/settings', [SystemSettingController::class, 'edit'])->name('admin.settings.edit');
         Route::post('/system/settings', [SystemSettingController::class, 'update'])->name('admin.settings.update');
+
+
+        // business category
+        Route::controller(BusinessCategoryController::class)->group(function () {
+            Route::get('business/category', 'index')->name('backend.business.category.index');
+            Route::get('business/category/create', 'create')->name('backend.business.category.create');
+            Route::get('business/category/edit/{id}', 'edit')->name('backend.business.category.edit');
+            Route::post('business/category/store', 'store')->name('backend.business.category.store');
+            Route::put('business/category/update/{id}', 'update')->name('backend.business.category.update');
+            Route::get('business/category/delete{id}', 'delete')->name('backend.business.category.delete');
+        });
     });
 
 require __DIR__ . '/auth.php';

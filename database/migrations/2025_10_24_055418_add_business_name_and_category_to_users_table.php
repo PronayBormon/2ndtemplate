@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('reset_password_token')->nullable()->after('remember_token');
-            $table->timestamp('reset_password_token_exp')->nullable()->after('reset_password_token');
+            $table->foreignId('business_category')->nullable()->after('name')->constrained('business_categories')->onDelete('cascade');
+            $table->string('business_name')->nullable()->after('business_category');
         });
     }
 
@@ -23,7 +23,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['reset_password_token', 'reset_password_token_exp']);
+            // Drop the foreign key first
+            $table->dropForeign(['business_category']);
+            $table->dropColumn('business_category');
+            $table->dropColumn('business_name');
         });
     }
 };

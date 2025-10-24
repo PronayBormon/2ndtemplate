@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileApiController extends Controller
@@ -71,5 +72,20 @@ class ProfileApiController extends Controller
             'message' => 'User details updated successfully.',
             'data'    => $user,
         ]);
+    }
+
+
+    public function updatePassword(Request $request)
+    {
+        $validated = $request->validateWithBag('updatePassword', [
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'confirmed'],
+        ]);
+
+        $request->user()->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return Helper::success("Password update successfully");
     }
 }

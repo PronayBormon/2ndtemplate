@@ -31,6 +31,12 @@ class AuthAPIController extends Controller
         // Attempt login
         if (Auth::attempt($request->only('email', 'password'))) {
             $user = Auth::user();
+
+            if (!$user->hasVerifiedEmail()) {
+                Auth::logout();
+
+                return Helper::error('You need to verify your email before logging in.', 403);
+            }
             return Helper::successData([
                 'token' => $user->createToken('API Token')->plainTextToken,
                 'user'  => $user,
@@ -63,10 +69,10 @@ class AuthAPIController extends Controller
 
         Mail::to($user->email)->send(new EmailVerification($otp, $user));
 
-        return Helper::successData('User registered successfully. OTP sent to your email.', [
+        return Helper::successData([
             'otp'  => $otp,
             'user' => $user,
-        ]);
+        ], 'User registered successfully. OTP sent to your email.');
     }
 
     public function verifyEmail(Request $request)
@@ -142,5 +148,36 @@ class AuthAPIController extends Controller
                 'otp' => $otp
             ],
         ]);
+    }
+
+
+    public function logout(Request $request)
+    {
+        // Revoke the token used for the current request
+        if ($request->user()) {
+            $request->user()->currentAccessToken()->delete();
+            return Helper::success('Logout successful', 200);
+        }
+
+        return Helper::error('User not authenticated', 401);
+    }
+
+
+    public function deleteAccount()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+
+        // Delete all tokens if using Sanctum
+        $user->tokens()->delete();
+
+        // Delete the user
+        $user->delete();
+
+        return response()->json(['message' => 'Account deleted successfully'], 200);
     }
 }

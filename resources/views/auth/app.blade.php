@@ -16,22 +16,22 @@
         {{ Request::is('login') ? 'Login' : 'Register' }} {{ config('app.name') ? ' || ' . config('app.name') : '' }}
     </title>
     <meta name="description"
-        content="{{ $settings->meta_description }}">
+        content="{{ $settings->meta_description?? "" }}">
     <meta name="keywords"
-        content="{{ $settings->meta_keywords }}">
+        content="{{ $settings->meta_keywords?? "" }}">
     <!-- Open Graph -->
     <meta property="og:title"
-        content="{{ $settings->og_title ?? $settings->meta_title }}">
+        content="{{ $settings->og_title ?? "" }}">
     <meta property="og:description"
-        content="{{ $settings->og_description ?? $settings->meta_description }}">
+        content="{{ $settings->og_description ?? "" }}">
     <meta property="og:image"
-        content="{{ asset($settings->og_image ?? $settings->logo) }}">
+        content="{{ asset($settings->og_image ?? "") }}">
     <meta property="og:type"
         content="website">
     <!-- Favicon -->
     <link rel="icon"
         type="image/x-icon"
-        href="{{ asset($settings->og_image ?? $settings->favicon) }}" />
+        href="{{ asset($settings->og_image ?? "") }}" />
 
 
     <meta name="description"
